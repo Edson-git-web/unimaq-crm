@@ -10,6 +10,7 @@ use App\Services\AuditoriaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class CotizacionController extends Controller
 {
@@ -126,5 +127,17 @@ class CotizacionController extends Controller
         AuditoriaService::registrar('UPDATE_STATUS', 'cotizaciones', $cotizacion->id_cotizacion, $datosAntes, $cotizacion->toArray());
 
         return redirect()->back()->with('success', 'Estado actualizado a ' . $nuevoEstado);
+    }
+
+    public function exportarPdfCotizacion(Cotizacion $cotizacion)
+    {
+        $cotizacion->load(['cliente', 'usuario', 'detalles']);
+
+        $pdf = Pdf::loadView('cotizaciones.pdf', compact('cotizacion'));
+        
+        // Formato A4 vertical por defecto, pero se puede poner landscape si se requiere
+        $pdf->setPaper('a4', 'portrait');
+
+        return $pdf->download('Cotizacion-' . $cotizacion->codigo . '.pdf');
     }
 }

@@ -53,4 +53,24 @@ class CotizacionTest extends TestCase
     {
         $this->assertTrue(true);
     }
+
+    public function test_descargar_pdf_cotizacion()
+    {
+        $cotizacion = Cotizacion::create([
+            'codigo' => 'COT-TEST-001',
+            'id_cliente' => $this->cliente->id_cliente,
+            'id_usuario' => $this->admin->id_usuario,
+            'fecha_emision' => now()->toDateString(),
+            'fecha_vence' => now()->addDays(7)->toDateString(),
+            'estado' => 'Pendiente',
+            'monto_subtotal' => 100,
+            'igv' => 18,
+            'monto_total' => 118,
+        ]);
+
+        $response = $this->actingAs($this->admin)->get(route('cotizaciones.pdf', $cotizacion));
+
+        $response->assertStatus(200);
+        $response->assertHeader('content-type', 'application/pdf');
+    }
 }

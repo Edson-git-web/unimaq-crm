@@ -29,6 +29,8 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('cotizaciones', CotizacionController::class);
         Route::patch('cotizaciones/{cotizacion}/estado', [CotizacionController::class, 'cambiarEstado'])
              ->name('cotizaciones.cambiarEstado');
+        Route::get('cotizaciones/{cotizacion}/pdf', [CotizacionController::class, 'exportarPdfCotizacion'])
+             ->name('cotizaciones.pdf');
         Route::resource('ventas', VentaController::class)->except(['edit','update','destroy']);
     });
 

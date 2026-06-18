@@ -9,7 +9,7 @@
             @if($cotizacion->estado === 'Aprobada')
                 <a href="{{ route('ventas.create', ['cotizacion_id' => $cotizacion->id_cotizacion]) }}" class="btn btn-success"><i class="bi bi-cash"></i> Generar Venta</a>
             @endif
-            <a href="{{ route('reportes.pdf', ['cotizacion_id' => $cotizacion->id_cotizacion]) }}" class="btn btn-danger"><i class="bi bi-file-earmark-pdf"></i> Generar PDF</a>
+            <a href="{{ route('cotizaciones.pdf', $cotizacion) }}" class="btn btn-danger"><i class="bi bi-file-earmark-pdf"></i> Descargar PDF</a>
         </div>
     </div>
 
