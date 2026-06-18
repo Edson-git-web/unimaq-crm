@@ -13,8 +13,13 @@
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
     <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
     <div id="app">
@@ -30,7 +35,34 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-
+                        @auth
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('dashboard') }}"><i class="bi bi-house"></i> Inicio</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('clientes.index') }}"><i class="bi bi-people"></i> Clientes</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('cotizaciones.index') }}"><i class="bi bi-file-text"></i> Cotizaciones</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('ventas.index') }}"><i class="bi bi-cart"></i> Ventas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('reportes.index') }}"><i class="bi bi-graph-up"></i> Reportes</a>
+                            </li>
+                            @if(optional(Auth::user()->rol)->nombre_rol === 'Administrador')
+                            <li class="nav-item dropdown">
+                                <a id="navbarAdmin" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="bi bi-gear"></i> Admin
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarAdmin">
+                                    <a class="dropdown-item" href="{{ route('usuarios.index') }}"><i class="bi bi-person-badge"></i> Usuarios</a>
+                                    <a class="dropdown-item" href="{{ route('auditoria.index') }}"><i class="bi bi-list-check"></i> Auditoría</a>
+                                </div>
+                            </li>
+                            @endif
+                        @endauth
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -51,7 +83,7 @@
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
+                                    {{ Auth::user()->nombre ?? 'Usuario' }} {{ Auth::user()->apellido ?? '' }}
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">

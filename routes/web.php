@@ -1,22 +1,45 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\CotizacionController;
+use App\Http\Controllers\VentaController;
+use App\Http\Controllers\ReporteController;
+use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\AuditoriaController;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', function() {
+    return redirect()->route('dashboard');
+})->name('home');
+
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::middleware(['rol:Administrador,Vendedor'])->group(function () {
+        Route::resource('clientes', ClienteController::class)->except(['show']);
+        Route::resource('cotizaciones', CotizacionController::class);
+        Route::patch('cotizaciones/{cotizacion}/estado', [CotizacionController::class, 'cambiarEstado'])
+             ->name('cotizaciones.cambiarEstado');
+        Route::resource('ventas', VentaController::class)->except(['edit','update','destroy']);
+    });
+
+    Route::prefix('reportes')->name('reportes.')->group(function () {
+        Route::get('/',      [ReporteController::class, 'index'])->name('index');
+        Route::get('/pdf',   [ReporteController::class, 'exportarPdf'])->name('pdf');
+        Route::get('/excel', [ReporteController::class, 'exportarExcel'])->name('excel');
+    });
+
+    Route::middleware(['rol:Administrador'])->group(function () {
+        Route::resource('usuarios', UsuarioController::class)->except(['show']);
+        Route::get('auditoria', [AuditoriaController::class, 'index'])->name('auditoria.index');
+    });
+});
