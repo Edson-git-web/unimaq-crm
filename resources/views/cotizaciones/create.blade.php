@@ -128,7 +128,8 @@ document.addEventListener('DOMContentLoaded', function() {
             sum += sub;
         });
 
-        const igv = sum * 0.18;
+        const igvRate = {{ config('unimaq.igv') }};
+        const igv = sum * igvRate;
         const total = sum + igv;
 
         document.getElementById('granSubtotal').value = sum.toFixed(2);
