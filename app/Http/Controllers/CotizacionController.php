@@ -84,8 +84,8 @@ class CotizacionController extends Controller
                 $detalle->save();
             }
 
-            $igv = collect([$subtotal * config('unimaq.igv')])->round(2)->first();
-            $total = collect([$subtotal + $igv])->round(2)->first();
+            $igv = round($subtotal * config('unimaq.igv', 0.18), 2);
+            $total = round($subtotal + $igv, 2);
 
             $cotizacion->monto_subtotal = $subtotal;
             $cotizacion->igv = $igv;
