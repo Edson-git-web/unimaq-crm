@@ -17,4 +17,9 @@ class Cotizacion extends Model {
     public function detalles() {
         return $this->hasMany(DetalleCotizacion::class, 'id_cotizacion', 'id_cotizacion');
     }
+
+    public function scopeSinSeguimiento($query) {
+        return $query->where('estado', 'Pendiente')
+                     ->where('updated_at', '<', now()->subDays(7));
+    }
 }
