@@ -93,16 +93,16 @@
                             <div class="bg-light rounded p-3">
                                 <div class="d-flex justify-content-between mb-2">
                                     <span class="text-muted fw-bold">SUBTOTAL:</span>
-                                    <span class="fw-bold text-dark d-flex align-items-center">S/ <input type="text" id="granSubtotal" class="form-control-plaintext text-end fw-bold p-0 ms-1 w-auto" readonly value="0.00"></span>
+                                    <span class="fw-bold text-dark">S/ <span id="granSubtotal">0.00</span></span>
                                 </div>
                                 <div class="d-flex justify-content-between mb-2">
                                     <span class="text-muted fw-bold">IGV (18%):</span>
-                                    <span class="fw-bold text-dark d-flex align-items-center">S/ <input type="text" id="granIgv" class="form-control-plaintext text-end fw-bold p-0 ms-1 w-auto" readonly value="0.00"></span>
+                                    <span class="fw-bold text-dark">S/ <span id="granIgv">0.00</span></span>
                                 </div>
                                 <hr class="my-2">
                                 <div class="d-flex justify-content-between">
                                     <span class="text-primary fw-bold fs-5">TOTAL:</span>
-                                    <span class="text-primary fw-bold fs-5 d-flex align-items-center">S/ <input type="text" id="granTotal" class="form-control-plaintext text-end text-primary fw-bold fs-5 p-0 ms-1 w-auto" readonly value="0.00"></span>
+                                    <span class="text-primary fw-bold fs-5">S/ <span id="granTotal">0.00</span></span>
                                 </div>
                             </div>
                         </div>
@@ -143,9 +143,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const igv = sum * igvRate;
         const total = sum + igv;
 
-        document.getElementById('granSubtotal').value = sum.toFixed(2);
-        document.getElementById('granIgv').value = igv.toFixed(2);
-        document.getElementById('granTotal').value = total.toFixed(2);
+        document.getElementById('granSubtotal').textContent = sum.toFixed(2);
+        document.getElementById('granIgv').textContent = igv.toFixed(2);
+        document.getElementById('granTotal').textContent = total.toFixed(2);
     };
 
     addRowBtn.addEventListener('click', function() {

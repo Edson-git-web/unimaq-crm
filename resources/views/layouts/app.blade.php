@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-bs-theme="light">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,8 +24,31 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Dark Mode FOUC Prevention -->
+    <script>
+        const getPreferredTheme = () => {
+            const storedTheme = localStorage.getItem('theme')
+            if (storedTheme) {
+                return storedTheme
+            }
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        }
+
+        const setTheme = theme => {
+            document.documentElement.setAttribute('data-bs-theme', theme)
+        }
+
+        setTheme(getPreferredTheme())
+    </script>
 </head>
 <body>
+    <!-- 👱‍♂️ Ponytail: Lazy CSS-only Global Loader -->
+    <div id="pt-loader" style="position:fixed; inset:0; background:var(--bg-color); z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center; transition:opacity 0.4s ease, visibility 0.4s;">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status"></div>
+        <div class="mt-3 fw-bold text-muted">Cargando CRM...</div>
+    </div>
+    <script>window.addEventListener('load', () => { const l = document.getElementById('pt-loader'); l.style.opacity = '0'; l.style.visibility = 'hidden'; setTimeout(() => l.remove(), 400); });</script>
     @guest
         @yield('content')
     @else
@@ -75,8 +98,12 @@
                         <span class="fs-5 fw-bold d-none d-md-inline" style="color: var(--secondary-color);">{{ config('app.name', 'UNIMAQ CRM') }}</span>
                     </div>
 
-                    <div class="dropdown">
-                        <a class="text-decoration-none dropdown-toggle d-flex align-items-center text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="dropdown d-flex align-items-center">
+                        <button class="btn btn-link text-dark text-decoration-none px-3 border-end border-2 me-3 theme-toggle-btn" id="theme-toggle" type="button" aria-label="Cambiar tema">
+                            <i class="bi bi-moon-stars-fill theme-icon-dark d-none"></i>
+                            <i class="bi bi-sun-fill theme-icon-light text-warning"></i>
+                        </button>
+                        <a class="text-decoration-none dropdown-toggle d-flex align-items-center text-dark user-dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <div class="bg-primary text-white rounded-circle d-flex justify-content-center align-items-center me-2" style="width: 35px; height: 35px;">
                                 {{ substr(Auth::user()->nombre ?? 'U', 0, 1) }}
                             </div>
@@ -130,5 +157,35 @@
             });
         </script>
     @endguest
+
+    <!-- Dark Mode Logic -->
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            if (themeToggleBtn) {
+                const updateIcon = () => {
+                    const currentTheme = document.documentElement.getAttribute('data-bs-theme');
+                    if (currentTheme === 'dark') {
+                        document.querySelector('.theme-icon-light').classList.add('d-none');
+                        document.querySelector('.theme-icon-dark').classList.remove('d-none');
+                        document.querySelector('.theme-icon-dark').classList.add('text-light');
+                    } else {
+                        document.querySelector('.theme-icon-light').classList.remove('d-none');
+                        document.querySelector('.theme-icon-dark').classList.add('d-none');
+                    }
+                }
+                
+                updateIcon();
+
+                themeToggleBtn.addEventListener('click', () => {
+                    const currentTheme = document.documentElement.getAttribute('data-bs-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    document.documentElement.setAttribute('data-bs-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    updateIcon();
+                });
+            }
+        });
+    </script>
 </body>
 </html>

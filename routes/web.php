@@ -16,10 +16,6 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', function() {
-    return redirect()->route('dashboard');
-})->name('home');
-
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
@@ -28,10 +24,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/perfil', [App\Http\Controllers\PerfilController::class, 'edit'])->name('perfil.edit');
     Route::put('/perfil', [App\Http\Controllers\PerfilController::class, 'update'])->name('perfil.update');
 
-    Route::get('clientes/{cliente}', [App\Http\Controllers\ClienteController::class, 'show'])->name('clientes.show');
-
     Route::middleware(['rol:Administrador,Vendedor'])->group(function () {
         Route::resource('clientes', ClienteController::class)->except(['show']);
+    });
+    Route::get('clientes/{cliente}', [App\Http\Controllers\ClienteController::class, 'show'])->name('clientes.show');
+    
+    Route::middleware(['rol:Administrador,Vendedor'])->group(function () {
         Route::resource('cotizaciones', CotizacionController::class);
         Route::patch('cotizaciones/{cotizacion}/estado', [CotizacionController::class, 'cambiarEstado'])
              ->name('cotizaciones.cambiarEstado');
