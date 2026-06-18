@@ -11,7 +11,7 @@ use App\Http\Controllers\AuditoriaController;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
-    return redirect()->route('login');
+    return auth()->check() ? redirect()->route('dashboard') : redirect()->route('login');
 });
 
 Auth::routes();
