@@ -22,7 +22,11 @@ Route::get('/home', function() {
 
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+
+    // GAP-05 Perfil
+    Route::get('/perfil', [App\Http\Controllers\PerfilController::class, 'edit'])->name('perfil.edit');
+    Route::put('/perfil', [App\Http\Controllers\PerfilController::class, 'update'])->name('perfil.update');
 
     Route::get('clientes/{cliente}', [App\Http\Controllers\ClienteController::class, 'show'])->name('clientes.show');
 
