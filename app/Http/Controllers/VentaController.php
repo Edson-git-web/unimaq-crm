@@ -13,9 +13,34 @@ use Illuminate\Support\Facades\Auth;
 
 class VentaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $ventas = Venta::with(['cliente', 'usuario', 'cotizacion'])->orderBy('id_venta', 'desc')->paginate(10);
+        $query = Venta::with(['cliente', 'usuario', 'cotizacion']);
+
+        if ($request->filled('buscar')) {
+            $busqueda = $request->buscar;
+            $query->where(function($q) use ($busqueda) {
+                $q->where('codigo', 'like', "%{$busqueda}%")
+                  ->orWhereHas('cliente', function($qCli) use ($busqueda) {
+                      $qCli->where('razon_social', 'like', "%{$busqueda}%")
+                           ->orWhere('ruc_dni', 'like', "%{$busqueda}%");
+                  });
+            });
+        }
+
+        if ($request->filled('estado')) {
+            $query->where('estado_pago', $request->estado);
+        }
+
+        if ($request->filled('fecha_inicio')) {
+            $query->where('fecha_venta', '>=', $request->fecha_inicio);
+        }
+
+        if ($request->filled('fecha_fin')) {
+            $query->where('fecha_venta', '<=', $request->fecha_fin);
+        }
+
+        $ventas = $query->orderBy('id_venta', 'desc')->paginate(10)->withQueryString();
         return view('ventas.index', compact('ventas'));
     }
 

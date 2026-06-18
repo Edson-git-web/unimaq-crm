@@ -14,9 +14,34 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class CotizacionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $cotizaciones = Cotizacion::with(['cliente', 'usuario'])->orderBy('id_cotizacion', 'desc')->paginate(10);
+        $query = Cotizacion::with(['cliente', 'usuario']);
+
+        if ($request->filled('buscar')) {
+            $busqueda = $request->buscar;
+            $query->where(function($q) use ($busqueda) {
+                $q->where('codigo', 'like', "%{$busqueda}%")
+                  ->orWhereHas('cliente', function($qCli) use ($busqueda) {
+                      $qCli->where('razon_social', 'like', "%{$busqueda}%")
+                           ->orWhere('ruc_dni', 'like', "%{$busqueda}%");
+                  });
+            });
+        }
+
+        if ($request->filled('estado')) {
+            $query->where('estado', $request->estado);
+        }
+
+        if ($request->filled('fecha_inicio')) {
+            $query->where('fecha_emision', '>=', $request->fecha_inicio);
+        }
+
+        if ($request->filled('fecha_fin')) {
+            $query->where('fecha_emision', '<=', $request->fecha_fin);
+        }
+
+        $cotizaciones = $query->orderBy('id_cotizacion', 'desc')->paginate(10)->withQueryString();
         return view('cotizaciones.index', compact('cotizaciones'));
     }
 

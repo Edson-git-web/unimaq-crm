@@ -14,6 +14,34 @@
         </div>
     @endif
 
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form action="{{ route('ventas.index') }}" method="GET" class="row g-3">
+                <div class="col-md-3">
+                    <input type="text" name="buscar" class="form-control" placeholder="Buscar por código o cliente..." value="{{ request('buscar') }}">
+                </div>
+                <div class="col-md-3">
+                    <select name="estado" class="form-select">
+                        <option value="">-- Todos los Estados --</option>
+                        <option value="Pendiente" {{ request('estado') == 'Pendiente' ? 'selected' : '' }}>Pendiente</option>
+                        <option value="Pagado parcial" {{ request('estado') == 'Pagado parcial' ? 'selected' : '' }}>Pagado parcial</option>
+                        <option value="Pagado total" {{ request('estado') == 'Pagado total' ? 'selected' : '' }}>Pagado total</option>
+                        <option value="Anulado" {{ request('estado') == 'Anulado' ? 'selected' : '' }}>Anulado</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <input type="date" name="fecha_inicio" class="form-control" title="Fecha inicio (Venta)" value="{{ request('fecha_inicio') }}">
+                </div>
+                <div class="col-md-2">
+                    <input type="date" name="fecha_fin" class="form-control" title="Fecha fin (Venta)" value="{{ request('fecha_fin') }}">
+                </div>
+                <div class="col-md-2 d-grid">
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> Filtrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="card shadow-sm">
         <div class="card-body p-0">
             <div class="table-responsive">
