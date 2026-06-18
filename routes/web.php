@@ -24,6 +24,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    Route::get('clientes/{cliente}', [App\Http\Controllers\ClienteController::class, 'show'])->name('clientes.show');
+
     Route::middleware(['rol:Administrador,Vendedor'])->group(function () {
         Route::resource('clientes', ClienteController::class)->except(['show']);
         Route::resource('cotizaciones', CotizacionController::class);

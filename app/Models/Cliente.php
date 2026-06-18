@@ -9,4 +9,14 @@ class Cliente extends Model {
     protected $primaryKey = 'id_cliente';
     public $timestamps = false;
     protected $fillable = ['ruc_dni', 'razon_social', 'tipo_cliente', 'email', 'telefono', 'direccion', 'estado'];
+
+    public function cotizaciones()
+    {
+        return $this->hasMany(Cotizacion::class, 'id_cliente', 'id_cliente');
+    }
+
+    public function ventas()
+    {
+        return $this->hasMany(Venta::class, 'id_cliente', 'id_cliente');
+    }
 }

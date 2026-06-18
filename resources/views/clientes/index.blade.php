@@ -39,6 +39,7 @@
                                 <td>{{ $cliente->email }}</td>
                                 <td>{{ $cliente->telefono }}</td>
                                 <td>
+                                    <a href="{{ route('clientes.show', $cliente) }}" class="btn btn-sm btn-outline-info" title="Ver Detalle"><i class="bi bi-eye"></i></a>
                                     <a href="{{ route('clientes.edit', $cliente) }}" class="btn btn-sm btn-outline-primary" title="Editar"><i class="bi bi-pencil"></i></a>
                                     <form action="{{ route('clientes.destroy', $cliente) }}" method="POST" class="d-inline-block" onsubmit="return confirm('¿Estás seguro de eliminar este cliente?');">
                                         @csrf

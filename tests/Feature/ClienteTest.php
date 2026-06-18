@@ -84,4 +84,21 @@ class ClienteTest extends TestCase
         $this->assertDatabaseHas('clientes', ['id_cliente' => $cliente->id_cliente]);
         $this->assertNotNull($cliente->fresh()->deleted_at);
     }
+
+    public function test_ver_detalle_cliente_historial_gap04()
+    {
+        $cliente = Cliente::create([
+            'ruc_dni' => '11223344556',
+            'razon_social' => 'Cliente Detalle',
+            'tipo_cliente' => 'Empresa'
+        ]);
+
+        $this->withoutExceptionHandling();
+        $response = $this->actingAs($this->admin)->get(route('clientes.show', $cliente));
+        
+        $response->assertStatus(200);
+        $response->assertSee('Cliente Detalle');
+        $response->assertSee('Historial de Cotizaciones');
+        $response->assertSee('Historial de Ventas');
+    }
 }

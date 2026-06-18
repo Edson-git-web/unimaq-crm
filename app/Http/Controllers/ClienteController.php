@@ -52,4 +52,13 @@ class ClienteController extends Controller
 
         return redirect()->route('clientes.index')->with('success', 'Cliente eliminado exitosamente.');
     }
+
+    public function show(Cliente $cliente)
+    {
+        $cliente->load([
+            'cotizaciones' => fn($q) => $q->orderByDesc('created_at')->with('usuario'),
+            'ventas'       => fn($q) => $q->orderByDesc('fecha_venta')->with('usuario'),
+        ]);
+        return view('clientes.show', compact('cliente'));
+    }
 }
