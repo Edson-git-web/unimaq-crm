@@ -6,12 +6,7 @@
         <div class="col-md-8">
             <h2 class="mb-4">Mi Perfil</h2>
 
-            @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
+
 
             <div class="card shadow-sm">
                 <div class="card-header bg-white fw-bold">Actualizar Datos Personales</div>
