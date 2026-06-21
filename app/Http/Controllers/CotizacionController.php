@@ -110,21 +110,7 @@ class CotizacionController extends Controller
         return view('cotizaciones.show', compact('cotizacion'));
     }
 
-    public function edit(Cotizacion $cotizacion)
-    {
-        return redirect()->route('cotizaciones.index')->with('error', 'La edición de cotizaciones no está habilitada en esta versión.');
-    }
 
-    public function update(Request $request, Cotizacion $cotizacion)
-    {
-        return redirect()->route('cotizaciones.index');
-    }
-
-    public function destroy(Cotizacion $cotizacion)
-    {
-        // Cancelar / eliminar no requerido, solo cambio de estado, pero por resource lo definimos
-        return redirect()->route('cotizaciones.index');
-    }
 
     public function cambiarEstado(Request $request, Cotizacion $cotizacion)
     {

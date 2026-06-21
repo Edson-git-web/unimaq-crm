@@ -62,7 +62,7 @@
                                 <td>{{ $audit->nombre }} {{ $audit->apellido }}</td>
                                 <td><span class="badge bg-secondary">{{ $audit->accion }}</span></td>
                                 <td>{{ $audit->tabla_afectada }}</td>
-                                <td>{{ $audit->id_registro_afectado }}</td>
+                                <td>{{ $audit->registro_id }}</td>
                                 <td>
                                     @if($audit->datos_antes)
                                         <button type="button" class="btn btn-xs btn-outline-secondary" onclick="alert(JSON.stringify({{ $audit->datos_antes }}, null, 2))">Ver</button>
@@ -77,7 +77,7 @@
                                         -
                                     @endif
                                 </td>
-                                <td>{{ $audit->ip_address }}</td>
+                                <td>{{ $audit->ip_origen }}</td>
                             </tr>
                         @empty
                             <tr>

@@ -32,7 +32,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('clientes/{cliente}', [App\Http\Controllers\ClienteController::class, 'show'])->name('clientes.show');
     
     Route::middleware(['rol:Administrador,Vendedor'])->group(function () {
-        Route::resource('cotizaciones', CotizacionController::class);
+        Route::resource('cotizaciones', CotizacionController::class)->except(['edit', 'update', 'destroy']);
         Route::patch('cotizaciones/{cotizacion}/estado', [CotizacionController::class, 'cambiarEstado'])
              ->name('cotizaciones.cambiarEstado');
         Route::get('cotizaciones/{cotizacion}/pdf', [CotizacionController::class, 'exportarPdfCotizacion'])
